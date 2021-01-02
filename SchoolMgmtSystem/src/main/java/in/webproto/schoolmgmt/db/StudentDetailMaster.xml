@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace = "StudentDetailMaster">	
+        
+    <select id="getBranchDetails" resultType="in.webproto.schoolmgmt.vo.CommonVO">
+    	SELECT branchId as integer1, name as string1 FROM SchoolBranch
+    </select>
+    
+    <select id="getStudentsCardDetails" resultType="in.webproto.schoolmgmt.to.StudentDetailMasterTO" parameterType="java.util.Map">
+    	SELECT sm.id, firstName, lastName, imagePath, photo AS byteArray, cm.className as clazz, section FROM StudentDetailMaster sm
+		INNER JOIN ClassMaster cm ON cm.id= sm.class
+    	WHERE isDeleted = 0
+    	<if test="clazz != null and clazz != ''">
+    		AND class = #{clazz}
+    	</if>
+    	<if test="section != null and section != ''">
+    		AND section = #{section}
+    	</if>
+    </select>
+    
+    <select id="getById" resultType="in.webproto.schoolmgmt.to.StudentDetailMasterTO" parameterType="java.util.Map">
+    	SELECT id, firstName, lastName, dob, gender, contactNo, branchId, session, regDate, fatherName, motherName 
+	    	<if test="isForUpdate == true">
+	    		,aadhar, email, bloodGroup, caste, religion, Category, guardianName, guardianRelation, guardianContact, occupation, admissioDate, localAddress
+	    		,localCity, localDistrict, localState, localPIN, permanentAddress, permanentCity, permanentDistrict, permanentState, permanentPIN
+	    		,fatherContact, fatherOccupation, fatherEducation, motherContact, motherOccupation, motherEducation, preSchool, preSchAddress
+	    		,preSchoolContact, lastExam, percentage, board, preRemarks, nationality, isEnablePreSchInfo, examYear
+	    	</if>
+    	FROM StudentDetailMaster
+    	WHERE id = #{studentId}
+    </select>
+    
+    <insert id="regStudent" parameterType="in.webproto.schoolmgmt.to.StudentDetailMasterTO" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO StudentDetailMaster 
+        ( 
+        	firstName, lastName, gender, contactNo, dob, branchId, session, regDate, fatherName, motherName, class, section, busRoute, fee
+        )
+        VALUES
+        (	#{firstName}, #{lastName}, #{gender}, #{contactNo}, #{dob}, #{branchId}, #{session}, #{regDate},
+	        #{fatherName}, #{motherName}, #{clazz}, #{section}, #{busRoute}, #{feeHead}
+        )
+    </insert>
+    
+    <update id="admissionStudent" parameterType="in.webproto.schoolmgmt.to.StudentDetailMasterTO">
+    	UPDATE StudentDetailMaster SET imagePath = #{imagePath}, dob = #{dob}, contactNo = #{contactNo}, photo = #{byteArray,jdbcType=BLOB}, aadhar = #{aadhar}, email = #{email}, bloodGroup = #{bloodGroup}, caste = #{caste}
+    		, religion = #{religion}, Category = #{category}, guardianName = #{guardianName}, guardianRelation = #{guardianRelation}, guardianContact = #{guardianContact}
+    		, occupation = #{occupation}, admissioDate = #{admissioDate}, localAddress = #{localAddress}, localCity  = #{localCity}, localDistrict  = #{localDistrict}
+    		, localState  = #{localState}, localPIN = #{localPin}, permanentAddress = #{permanentAddress}, permanentCity = #{permanentCity}, permanentDistrict = #{permanentDistrict}
+    		, permanentState = #{permanentState}, permanentPIN = #{permanentPin}, fatherName = #{fatherName}, fatherContact = #{fatherContact}, fatherOccupation = #{fatherOccupation}
+    		, fatherEducation = #{fatherEducation}, motherName = #{motherName}, motherContact = #{motherContact}, motherOccupation = #{motherOccupation}, motherEducation = #{motherEducation}
+    		, preSchool = #{preSchool}, preSchAddress = #{preSchAddress}, preSchoolContact = #{preSchoolContact}, lastExam = #{lastExam}, percentage = #{percentage}
+    		, board = #{board}, preRemarks = #{preRemarks}, nationality = #{nationality}, isEnablePreSchInfo = #{isEnablePreSchInfo}, examYear = #{examYear}
+    		WHERE id = #{id}
+    </update>
+    
+    <update id="deleteByStudentId" parameterType="java.util.Map">
+    	UPDATE StudentDetailMaster SET isDeleted = #{isDeleted} WHERE id = #{studentId}
+    </update>
+    
+</mapper>

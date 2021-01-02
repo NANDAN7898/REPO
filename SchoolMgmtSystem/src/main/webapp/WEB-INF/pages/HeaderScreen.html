@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="HeaderScreen">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Home</title>
+	<meta name="keywords" content="Home" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<style>
+	.dropdown-item
+	{
+		font-size: 12px;
+	}
+	.modal-body
+	{
+		background-color: #FFFFFF;
+	}
+	.dropdown-menu-right
+	{
+		top: 5px !important;
+	}
+	.dropdown-menu-right:BEFORE
+	{
+		position: absolute;
+		top: -7px;
+		left: 110px;
+		right: auto;
+		display: inline-block;
+		border-right: 7px solid transparent;
+		border-bottom: 7px solid #CED0D1;
+		border-left: 7px solid transparent;
+		content: '';
+		margin-left: 31px;
+	}
+	
+	.dropdown-menu-right:AFTER
+	{
+		position: absolute;
+		top: -6px;
+		left: 143px;
+		right: auto;
+		display: inline-block;
+		border-right: 6px solid transparent;
+		border-bottom: 6px solid #fff;
+		border-left: 6px solid transparent;
+		content: '';
+	}
+</style>
+</head>
+<body>
+	<header class="header dark-bg">
+		<div class="toggle-nav" >
+			<div class="icon-reorder tooltips" data-original-title="Toggle Navigation" data-placement="bottom"><i class="icon_menu"></i></div>
+		</div>
+		<a href="#" class="logo">WEB <span class="lite">PROTO</span></a>
+		<div class="nav search-row" id="top_menu">
+			<ul class="nav top-menu">
+				<li>
+					<form class="navbar-form">
+						<input class="form-control" placeholder="Search" type="text">
+					</form>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<div class="modal profileModal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Modal Heading</h4>
+						</div>
+						<div class="modal-body">
+						  <span style="color: #202125">My Profile Modal</span>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" onclick="hideModal('profileModal')"><span>OK</span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal settingModal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Modal Heading</h4>
+						</div>
+						<div class="modal-body">
+						  <span style="color: #202125">Setting Modal</span>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary" onclick="hideModal('settingModal')"><span>OK</span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="btn-group nav pull-right top-menu" style="margin-top: 15px; margin-right: 13px;">
+			<span class="dropdown-toggle fas fa-user-circle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 20px;"></span>
+			<div class="dropdown-menu dropdown-menu-right" style="font-size:15px;">
+				<span class="dropdown-item" style="text-align: center; font-weight: bold; font-size: 16px;"> user name</span>
+				<span class="dropdown-item" onclick="openModal('profileModal')"><i class="fas fa-user"></i>&nbsp;&nbsp;&nbsp;<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.myprofile')}"></span></span>
+				<span class="dropdown-item" onclick="openModal('settingModal')"><i class="fas fa-cog"></i>&nbsp;&nbsp;&nbsp;<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.settings')}"></span></span>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" href="/logout" th:href="@{/logout}"><i class="fas fa-power-off"></i>&nbsp;&nbsp;&nbsp;<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.logout')}"></span></a>
+			</div>
+		</div>
+	</header>
+</body>
+</html>

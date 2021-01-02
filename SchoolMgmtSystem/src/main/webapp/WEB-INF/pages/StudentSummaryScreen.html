@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+ 	<th:block th:each="list : ${cardList}">
+		<div class=" col-lg-4">
+			<div class="con">
+				<div class="head">
+					<div class="btn-group nav pull-right top-menu" style="margin-top: 5px; margin-right: 13px;">
+						<span class="dropdown-toggle fas fa-ellipsis-v" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 20px;"></span>
+						<div class="dropdown-menu dropdown-menu-right" style="font-size: 15px;">
+							<span class="dropdown-item" th:onclick="'fnSubmit(\'' + ${list.studentId} + '\')'"><i class="fas fa-user"></i>&nbsp;&nbsp;&nbsp;<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.updateprofile')}"></span></span>
+							<span class="dropdown-item" onclick="openModal('settingModal')"><i class="fas fa-cog"></i>&nbsp;&nbsp;&nbsp;<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.marks')}"></span></span>
+							<span class="dropdown-item" th:onclick="'fnDelete(\'' + ${list.studentId} + '\')'"><i class="fas fa-trash-alt"></i>&nbsp;&nbsp;&nbsp;<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.delete')}"></span></span>
+						</div>
+					</div>
+				</div>
+				<div style="display: inline-block;">
+					<div style="margin: 10px; height: 132px; width: 100px; display: inline-block; float: left;">
+						<img alt="" th:src="${list.imagePath}" style="height: 132px; width: 100px;">
+					</div>
+					<div style="display: inline-block; width: 223px;">
+						<table class="table">
+							<tbody>
+								<tr>
+				     				<td>
+				     					<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.name')}"></span>
+				     				</td>
+				      				<td>
+				      					<span th:text="${list.firstName}"></span>
+				      				</td>
+				    			</tr>
+				    			<tr>
+							    	<td>
+							    		<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.rollno')}"></span>
+							    	</td>
+				      				<td>
+				      					<span th:text="${list.studentId}"></span>
+				      				</td>
+				    			</tr>
+				   				<tr>
+				      				<td>
+				      					<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.class')}"></span>
+				      				</td>
+				      				<td>
+				      					<span th:text="${list.clazz}"></span>
+				      				</td>
+				    			</tr>
+				    			<tr>
+				      				<td>
+				      					<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.section')}"></span>
+				      				</td>
+				      				<td>
+				      					<span th:text="${list.section}"></span>
+				      				</td>
+				    			</tr>
+				 			</tbody>
+				 		</table>
+			 		</div>
+		 		</div>
+			 </div>
+		</div>
+	</th:block>
+</body>
+</html>

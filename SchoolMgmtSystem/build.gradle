@@ -1,0 +1,65 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.0.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+group = 'in.webproto.schoolmgmt'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	
+	implementation 'org.springframework.session:spring-session-core'
+	
+	runtimeOnly 'mysql:mysql-connector-java'
+	
+	compileOnly 'org.springframework.boot:spring-boot-devtools:2.3.0.RELEASE'
+	
+	providedCompile 'org.springframework.boot:spring-boot-starter-tomcat'
+	
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.3.0.RELEASE'
+	
+	compile group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '2.4.1'
+	
+	compile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
+	
+	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity4', version: '3.0.4.RELEASE'
+	
+	providedCompile group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+	
+	compile group: 'org.mybatis', name: 'mybatis-spring', version: '2.0.4'
+	
+	compile group: 'org.mybatis', name: 'mybatis', version: '3.5.4'
+	
+	compile group: 'org.json', name: 'json', version: '20200518'
+	
+	compile group: 'commons-io', name: 'commons-io', version: '2.7'
+	
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	
+	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+test {
+	useJUnitPlatform()
+}
+    
+eclipse {
+  wtp {
+    	component {
+      contextPath = 'schoolmgmt'
+    }
+  }
+}

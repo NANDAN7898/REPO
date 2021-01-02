@@ -1,0 +1,100 @@
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout" th:fragment="layout">
+	<head>
+		<title>Header</title>
+		
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/all.min.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/bootstrap.min.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/bootstrap-theme.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/elegant-icons-style.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/fontawesome.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/fontawesome.min.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/style.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/style-responsive.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/line-icons.css}"/>
+		<link rel="stylesheet" type="text/css" th:href="@{/styles/jquery-ui.css}"/>
+		
+		<script type="text/javascript" th:src="@{/scripts/popper.min.js}"></script>
+		<script type="text/javascript" th:src="@{/scripts/jquery.js}"></script>
+		<script type="text/javascript" th:src="@{/scripts/bootstrap.min.js}"></script>
+		<script type="text/javascript" th:src="@{/scripts/scripts.js}"></script>
+		<script type="text/javascript" th:src="@{/scripts/jquery-3.3.1.min.js}"></script>
+		<script type="text/javascript" th:src="@{/scripts/jquery-ui-1.10.4.min.js}"></script>
+		<script type="text/javascript" th:src="@{/scripts/jquery.autosize.min.js}"></script>
+		<script type="text/javascript" th:src="@{/scripts/jquery.nicescroll.js}"></script>
+		<script type="text/javascript" th:src="@{/scripts/jquery-ui.js}"></script>
+		<script type="text/javascript" th:src="@{/scripts/jquery.dataTables.min.js}"></script>
+		
+<style>
+.control-label
+{
+	padding-top: 6px;
+}
+.dropdown-toggle::after
+{
+	display: none;
+}
+.modal-dialog
+{
+	left: auto;
+}
+.ui-datepicker td span, .ui-datepicker td a
+{
+	text-align: center;
+}
+</style>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	var cdate = new Date();
+	var yRange = (cdate.getFullYear() - 20) + ":" + cdate.getFullYear();
+	
+	$("#dob").datepicker(
+	{
+      changeMonth: true,
+      changeYear: true,
+      yearRange: yRange
+    });
+	
+});
+	function isNumeric(str)
+	{
+		return /^[0-9]+$/.test(str);
+	}
+	
+	function isValidEmail(email)
+	{
+		return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
+	}
+	
+	function isFloat(value)
+	{
+		return /^\d+(\.\d{1,2})?$/.test(value);
+	}
+
+	function isInt(str)
+	{
+		return  /^ *[0-9]+ *$/.test(str);
+	}
+	function openModal(id)
+	{
+		$("." + id).show();
+	}
+	
+	function hideModal(id)
+	{
+		$("." + id).hide();
+	}
+</script>
+	</head>
+	<body>
+		<header  th:replace="~{/HeaderScreen}"class="header dark-bg"></header>
+		<div id="container">
+			<div class="">
+				<div th:replace="~{/SideBarMenuScreen}"></div>
+			</div>
+			 <section id="main-content">
+				<div layout:fragment="content"></div>
+			</section>
+		</div>
+	</body>
+</html>

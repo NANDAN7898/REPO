@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="~{/layout}" >
+<head>
+<meta charset="ISO-8859-1">
+<title>Registration</title>
+<style type="text/css">
+.label_check
+{
+	margin-left: 20px;	
+}
+.input-col
+{
+	margin-top: 10px;
+}
+</style>
+<script type="text/javascript" th:inline="javascript">
+$(document).ready(function()
+{
+	var status = /*[[${status}]]*/;
+	if(status == 'SUCCESSFUL')
+	{
+		openModal('statusModal');
+	}
+	getSectionByClass($("#clazz").val());
+});
+
+function getSectionByClass(clazz)
+{
+	var token = /*[[${_csrf.token}]]*/;
+	$.ajax({
+        type: "POST",
+        url: /*[[@{/class/getSection}]]*/,
+        data: {
+        	"clazz"   : clazz
+        }, 
+        beforeSend: function(xhr) 
+	    {
+	        xhr.setRequestHeader('X-CSRF-TOKEN', token);
+	    },
+        cache: false,
+        timeout: 600000,
+        success: function (response)
+        {	
+        	var json = JSON.parse(response);
+        	$("#section").empty();
+        	Object.entries(json).forEach(([key, val]) => 
+    		{
+	        	$("#section").append(new Option(key, val)); 
+    		});
+        },
+        error: function (e) 
+        {
+            console.log("ERROR : ", e);
+        }
+    });	
+}
+
+function fnGoAdmission(goforAdmission)
+{
+	var form = document.StudentFormBean;
+	var requiredInfo = /*[[${@environment.getProperty('webproto.schoolmgmt.validation.msg.requiredinformation')}]]*/;
+	var numberMsg = /*[[${@environment.getProperty('webproto.schoolmgmt.validation.msg.numeric')}]]*/;
+	var numberMsg = /*[[${@environment.getProperty('webproto.schoolmgmt.validation.msg.number')}]]*/;
+	var greaterThanZero = /*[[${@environment.getProperty('webproto.schoolmgmt.validation.msg.positivenumber')}]]*/;
+	var firstName = $("#firstName").val();
+	var lastName = $("#lastName").val();
+	var contactNo =  $("#contactNo").val();
+	
+	if(firstName == null || firstName.trim() == '')
+	{
+		message = $('#firstNameLabel').text() + ' ' + requiredInfo;
+		alert(message);
+		return false;
+	}
+	
+	if(lastName == null || lastName.trim() == '')
+	{
+		message = $('#lastNameLabel').text() + ' ' + requiredInfo;
+		alert(message);
+		return false;
+	}
+
+	
+	if($("#fatherName").val() == null || $("#fatherName").val().trim() == '')
+	{
+		message = $('#fatherNameLabel').text() + ' ' + requiredInfo;
+		alert(message);
+		return false;
+	}
+	
+	if($("#motherName").val() == null || $("#motherName").val().trim() == '')
+	{
+		message = $('#motherNameLabel').text() + ' ' + requiredInfo;
+		alert(message);
+		return false;
+	}
+	
+	if(contactNo == null || contactNo.trim() == '')
+	{
+		message = $('#contactLabel').text() + ' ' + requiredInfo;
+		alert(message);
+		return false;
+	}
+	if(isNaN(contactNo) || !isNumeric(contactNo))
+	{
+		message = $('#contactLabel').text() + ' ' + numberMsg;
+		alert(message);
+		return false;
+	}
+	$("#goforAdmission").val(goforAdmission);
+	form.submit();
+}
+</script>
+</head>
+<body>
+<div layout:fragment="content" class="wrapper">
+<form th:object="${StudentFormBean}" th:action="@{/student/register}" name="StudentFormBean" method="post">
+<input type="hidden" name="goforAdmission" id="goforAdmission" value="false">
+<input type="hidden" th:field="*{studentId}">
+	<div class="col-lg-12 breadcrum_margin">
+        <ol class="breadcrumb">
+          <li><i class="icon_house_alt"></i><a th:href="@{/admin}"><span th:text="${@environment.getProperty('webproto.schoolmgmt.label.home')}"></span></a></li>
+          <li><i class="icon_desktop"></i><span th:text="${@environment.getProperty('webproto.schoolmgmt.label.student')}"></span></li>
+          <li><i class="icon_desktop"></i><span th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.registration')}"></span></li>
+        </ol>
+    </div>
+	<div class="row" style="margin-left: 5px;">
+		  <!-- check box top -->
+		<div class="col-lg-12">
+			<div class="col-lg-8">
+			</div>
+			<div class="col-lg-4">
+			<label class="label_check" for="underrte">
+              	<input name="sample-checkbox-01" id="underrte" value="1" type="checkbox" checked />
+              	&nbsp;<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.underrte')}"></span>
+            </label>
+			<label class="label_check" for="hosteler">
+              	<input name="sample-checkbox-01" id="hosteler" value="1" type="checkbox" checked />
+              	&nbsp;<span th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.hosteler')}"></span>
+            </label>  
+            </div>  
+		</div>	
+			<!-- 	input text -->
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" th:text="${@environment.getProperty('webproto.schoolmgmt.label.branch')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<select class="form-control" th:field="*{branchId}">
+                	<th:block th:each="list: ${StudentFormBean.branchList}">
+	                    <option th:value="${list.integer1}" th:text="${list.string1}" th:selected="${list == StudentFormBean.branchId}"></option>
+                	</th:block>
+                 </select>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col">
+			<div class="col-lg-4">
+				<label class="control-label" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.session')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<select class="form-control" th:field="*{session}">
+                	<th:block th:each="list: ${StudentFormBean.sessionList}">
+	                    <option th:value="${list}" th:text="${list}" th:selected="${list == StudentFormBean.session}"></option>
+                	</th:block>
+                 </select>
+			</div>
+		 </div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" id="firstNameLabel" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.firstname')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<input type="text" class="form-control" maxlength="50" th:field="*{firstName}">
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" id="lastNameLabel" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.lastname')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<input type="text" class="form-control" maxlength="50" th:field="*{lastName}">
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" id="dobLabel" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.dob')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<input type="text" class="form-control" th:field="*{dob}">
+			</div>
+		</div>
+			
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" id="fatherNameLabel" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.fathername')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<input type="text" class="form-control" maxlength="50" th:field="*{fatherName}">
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" id="motherNameLabel" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.mothername')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<input type="text" class="form-control" maxlength="50" th:field="*{motherName}">
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.gender')}"></label>
+			</div>
+			<div class="col-lg-8">
+                <select class="form-control" th:field="*{gender}">
+                	<th:block th:each="map: ${StudentFormBean.genderMap}">
+	                	<option th:value="${map.key}" th:text="${map.value}"></option>
+                	</th:block>
+                 </select>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" id="contactLabel" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.contactno')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<input type="text" class="form-control" maxlength="10" th:field="*{contactNo}">
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col">
+			<div class="col-lg-4">
+				<label class="control-label" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.class')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<select class="form-control" th:field="*{clazz}" onchange="getSectionByClass(this.value)">
+                	<th:block th:each="clazz : ${classList}">
+	                	<option th:value="${clazz.id}" th:text="${clazz.className}"></option>
+                	</th:block>
+                 </select>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.section')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<select class="form-control" th:field="*{section}">
+                </select>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label" th:text="${@environment.getProperty('webproto.schoolmgmt.label.student.busroute')}"></label>
+			</div>
+			<div class="col-lg-8">
+				<select class="form-control" th:field="*{busRoute}">
+                	<option value="1">KOR</option>
+                    <option value="2">BTM</option>
+                 </select>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				<label class="control-label">Fee Head</label>
+			</div>
+			<div class="col-lg-8">
+				<select class="form-control" th:field="*{feeHead}">
+                	<option value="1">200</option>
+                    <option value="2">300</option>
+                 </select>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				
+			</div>
+			<div class="col-lg-8">
+				<span class="btn btn-primary" th:text="${@environment.getProperty('webproto.schoolmgmt.label.reset')}"></span>
+				<span class="btn btn-primary" onclick="openModal('statusModal')" th:text="${@environment.getProperty('webproto.schoolmgmt.label.print')}"></span>
+			</div>
+		</div>
+		
+		<div class="col-lg-6 input-col " >
+			<div class="col-lg-4">
+				
+			</div>
+			<div class="col-lg-8">
+				<input type="button" class="btn btn-primary" onclick="fnGoAdmission('false')" th:value="${@environment.getProperty('webproto.schoolmgmt.label.student.onlyregistration')}"/>
+				<input type="button" class="btn btn-primary" onclick="fnGoAdmission('true')" th:value="${@environment.getProperty('webproto.schoolmgmt.label.student.goforadmission')}"/>
+			</div>
+		</div>
+	</div>
+</form>
+	<div class="modal statusModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body" style="background-color: #DFF8E3;">
+				  	<div class="alert alert-success" style="border-color: #DFF8E3;">
+				  	  <span th:text="${StudentFormBean.firstName + ' ' + StudentFormBean.lastName}"></span>&nbsp;<span th:text="${@environment.getProperty('webproto.schoolmgmt.status.registeredsuccessfully')}"></span>
+				  	  <br>
+				  	  <span th:text="${StudentFormBean.studentId}"></span>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" onclick="hideModal('statusModal')"><span>OK</span></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

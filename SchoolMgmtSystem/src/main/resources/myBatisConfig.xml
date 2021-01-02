@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<properties resource="databaseconnection.properties">
+  		<property name="org.apache.ibatis.parsing.PropertyParser.enable-default-value" value="true"/>
+	</properties>
+   <environments default = "development">
+      <environment id = "development">
+         <transactionManager type = "JDBC"/> 
+         <dataSource type = "POOLED">
+            <property name = "driver" value = "${driver}"/>
+            <property name = "url" value = "${url}"/>
+            <property name = "username" value = "${user}"/>
+            <property name = "password" value = "${password}"/>
+            <!-- <property name="poolMaximumActiveConnections" value="${maxActive}" />
+			<property name="poolMaximumIdleConnections" value="${maxIdle}" />
+			<property name="poolTimeToWait" value="${maxWaitTimeInMills}" />
+			<property name="poolPingQuery" value="SELECT 1" />
+			<property name="poolPingEnabled" value="true" /> -->
+         </dataSource>   
+      </environment>
+   </environments>
+   <mappers>
+      <mapper resource = "in/webproto/schoolmgmt/db/UserDetailMaster.xml"/>
+      <mapper resource = "in/webproto/schoolmgmt/db/StudentDetailMaster.xml"/>
+      <mapper resource ="in/webproto/schoolmgmt/db/ClassMaster.xml"/>
+      <mapper resource ="in/webproto/schoolmgmt/db/TeacherMaster.xml"/>
+   </mappers>
+</configuration>
